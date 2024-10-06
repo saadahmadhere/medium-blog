@@ -1,9 +1,11 @@
 import { Hono } from 'hono';
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
+import { sign } from 'hono/jwt';
 
 const app = new Hono<{
 	Bindings: {
+		JWT_SECRET: string;
 		DATABASE_URL: string; // to give a type to the environment variable, otherwise typsecript will complain.
 	};
 }>();
@@ -18,10 +20,9 @@ app.post('api/v1/signup', async (c) => {
 		datasourceUrl: dbUrl,
 	}).$extends(withAccelerate());
 
-	// console.log('db url', dbUrl);
 	const body = await c.req.json();
 
-	await prisma.user.create({
+	const user = await prisma.user.create({
 		data: {
 			email: body.email,
 			password: body.password,
@@ -29,8 +30,12 @@ app.post('api/v1/signup', async (c) => {
 		},
 	});
 
-	console.log('body,', body);
-	return c.text('sign up /');
+	const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+
+	return c.json({
+		message: 'sign up successful',
+		token,
+	});
 });
 app.post('api/v1/signin', (c) => c.text('sign in /'));
 app.post('api/v1/blog', (c) => c.text('blog post /'));
