@@ -68,18 +68,22 @@ app.post('/signin', async (c) => {
 
 	const body = await c.req.json();
 
-	const user = await prisma.user.findUnique({
-		where: {
-			email: body.email,
-		},
-	});
-
-	if (!user) {
-		return c.json({ message: 'user not found' });
+	try {
+		const user = await prisma.user.findUnique({
+			where: {
+				email: body.email,
+				password: body.password,
+			},
+		});
+		if (!user) {
+			c.status(403);
+			return c.json({ message: 'Incorrect credentials' });
+		}
+		const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+		return c.json({ message: 'login succesfully', token });
+	} catch (error) {
+		return c.json({ message: (error as Error).message });
 	}
-
-	const token = await sign({ id: user.id }, c.env.JWT_SECRET);
-	return c.json({ message: 'login succesfully', token });
 });
 app.post('/blog', (c) => c.text('blog post /'));
 app.put('/blog', (c) => c.text('blog put /'));
