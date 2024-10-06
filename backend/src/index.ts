@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
-import { sign } from 'hono/jwt';
+import { sign, verify } from 'hono/jwt';
 
 const app = new Hono<{
 	Bindings: {
@@ -9,6 +9,25 @@ const app = new Hono<{
 		DATABASE_URL: string; // to give a type to the environment variable, otherwise typsecript will complain.
 	};
 }>().basePath('/api/v1');
+
+app.use('/blog/*', async (c, next) => {
+	// get the header
+	const header = c.req.header('authorization') || '';
+
+	const token = header.split(' ')[1];
+
+	// verify the header
+	const decodedPayload = await verify(token, c.env.JWT_SECRET);
+
+	if (decodedPayload.id) {
+		// if the header is correct, proceed.
+		next();
+	} else {
+		// if not, return 403 status code.
+		c.status(403);
+		return c.json({ error: 'unauthorized' });
+	}
+});
 
 app.get('/', (c) => {
 	return c.text('Hello Hono  adsf!');
