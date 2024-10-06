@@ -41,20 +41,23 @@ app.post('/signup', async (c) => {
 
 	const body = await c.req.json();
 
-	const user = await prisma.user.create({
-		data: {
-			email: body.email,
-			password: body.password,
-			firstName: body.firstName,
-		},
-	});
-
-	const token = await sign({ id: user.id }, c.env.JWT_SECRET);
-
-	return c.json({
-		message: 'sign up successful',
-		token,
-	});
+	try {
+		const user = await prisma.user.create({
+			data: {
+				email: body.email,
+				password: body.password,
+				firstName: body.firstName,
+			},
+		});
+		const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+		c.status(200);
+		return c.json({
+			message: 'sign up successful',
+			token,
+		});
+	} catch (error) {
+		return c.json({ message: 'invalid' });
+	}
 });
 
 app.post('/signin', async (c) => {
