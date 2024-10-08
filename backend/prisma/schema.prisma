@@ -19,12 +19,12 @@ model User {
   firstName String
   lastName String?
   password String
-  posts Post[]
+  posts Blog[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Post {
+model Blog {
   id String @id @default(uuid())
   title String
   content String
@@ -34,3 +34,4 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
