@@ -32,6 +32,7 @@ blogRouter.post('/', async (c) => {
 	}).$extends(withAccelerate());
 
 	const body = await c.req.json();
+	const authorId = c.get('authorId');
 
 	try {
 		const blog = await prisma.blog.create({
@@ -39,7 +40,7 @@ blogRouter.post('/', async (c) => {
 				title: body.title,
 				content: body.content,
 				isPublished: body.isPublished,
-				authorId: '1',
+				authorId,
 			},
 		});
 
