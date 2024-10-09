@@ -1,26 +1,26 @@
 import { z } from 'zod';
 
 //user
-const signupInput = z.object({
+export const signupInput = z.object({
 	email: z.string().email(),
 	firstName: z.string(),
 	lastName: z.string().optional(),
 	password: z.string().min(6),
 });
 
-const signinInput = z.object({
+export const signinInput = z.object({
 	email: z.string().email(),
 	password: z.string(),
 });
 
 // blog
-const createBlogInput = z.object({
+export const createBlogInput = z.object({
 	title: z.string(),
 	content: z.string(),
 	authorId: z.string(),
 });
 
-const updateBlogInput = z.object({
+export const updateBlogInput = z.object({
 	title: z.string(),
 	content: z.string(),
 	id: z.string(),

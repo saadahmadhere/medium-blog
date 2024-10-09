@@ -1,5 +1,5 @@
 import { z } from 'zod';
-declare const signupInput: z.ZodObject<{
+export declare const signupInput: z.ZodObject<{
     email: z.ZodString;
     firstName: z.ZodString;
     lastName: z.ZodOptional<z.ZodString>;
@@ -15,7 +15,7 @@ declare const signupInput: z.ZodObject<{
     password: string;
     lastName?: string | undefined;
 }>;
-declare const signinInput: z.ZodObject<{
+export declare const signinInput: z.ZodObject<{
     email: z.ZodString;
     password: z.ZodString;
 }, "strip", z.ZodTypeAny, {
@@ -25,7 +25,7 @@ declare const signinInput: z.ZodObject<{
     email: string;
     password: string;
 }>;
-declare const createBlogInput: z.ZodObject<{
+export declare const createBlogInput: z.ZodObject<{
     title: z.ZodString;
     content: z.ZodString;
     authorId: z.ZodString;
@@ -38,7 +38,7 @@ declare const createBlogInput: z.ZodObject<{
     content: string;
     authorId: string;
 }>;
-declare const updateBlogInput: z.ZodObject<{
+export declare const updateBlogInput: z.ZodObject<{
     title: z.ZodString;
     content: z.ZodString;
     id: z.ZodString;
@@ -55,4 +55,3 @@ export type SignupInput = z.infer<typeof signupInput>;
 export type SigninInput = z.infer<typeof signinInput>;
 export type CreateBlogInput = z.infer<typeof createBlogInput>;
 export type UpdateBlogInput = z.infer<typeof updateBlogInput>;
-export {};
