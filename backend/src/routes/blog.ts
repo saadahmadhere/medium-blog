@@ -15,13 +15,18 @@ export const blogRouter = new Hono<{
 
 blogRouter.use('/*', async (c, next) => {
 	const authHeader = c.req.header('authorization') || '';
-	const user = await verify(authHeader, c.env.JWT_SECRET);
-	if (user) {
-		c.set('authorId', String(user.id));
-		await next();
-	} else {
+	try {
+		const user = await verify(authHeader, c.env.JWT_SECRET);
+		if (user) {
+			c.set('authorId', String(user.id));
+			await next();
+		} else {
+			c.status(403);
+			return c.json({ message: "user doen't exist" });
+		}
+	} catch (error) {
 		c.status(403);
-		return c.json({ message: "user doen't exist" });
+		return c.json({ message: 'user not logged in' });
 	}
 });
 
