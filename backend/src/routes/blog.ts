@@ -72,29 +72,7 @@ blogRouter.put('/', async (c) => {
 		});
 
 		return c.json({
-			id: blog.id,
-		});
-	} catch (error) {
-		return c.json({ message: (error as Error).message });
-	}
-});
-
-blogRouter.get('/', async (c) => {
-	const dbUrl = c.env.DATABASE_URL;
-	const prisma = new PrismaClient({
-		datasourceUrl: dbUrl,
-	}).$extends(withAccelerate());
-
-	const body = await c.req.json();
-
-	try {
-		const blog = await prisma.blog.findFirst({
-			where: {
-				id: body.id,
-			},
-		});
-		return c.json({
-			blog,
+			message: 'blog updated successfully',
 		});
 	} catch (error) {
 		return c.json({ message: (error as Error).message });
@@ -112,6 +90,28 @@ blogRouter.get('/bulk', async (c) => {
 		const blogTitles =
 			allBlogs.length > 0 ? allBlogs.map((blog) => blog.title) : [];
 		return c.json({ blogs: blogTitles });
+	} catch (error) {
+		return c.json({ message: (error as Error).message });
+	}
+});
+
+blogRouter.get('/:id', async (c) => {
+	const dbUrl = c.env.DATABASE_URL;
+	const prisma = new PrismaClient({
+		datasourceUrl: dbUrl,
+	}).$extends(withAccelerate());
+
+	const blogId = c.req.param('id');
+
+	try {
+		const blog = await prisma.blog.findFirst({
+			where: {
+				id: blogId,
+			},
+		});
+		return c.json({
+			blog,
+		});
 	} catch (error) {
 		return c.json({ message: (error as Error).message });
 	}
