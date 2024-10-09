@@ -18,7 +18,7 @@ blogRouter.use('/*', async (c, next) => {
 	const user = await verify(authHeader, c.env.JWT_SECRET);
 	if (user) {
 		c.set('authorId', String(user.id));
-		next();
+		await next();
 	} else {
 		c.status(403);
 		return c.json({ message: "user doen't exist" });
