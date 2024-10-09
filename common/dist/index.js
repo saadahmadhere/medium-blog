@@ -17,7 +17,6 @@ exports.signinInput = zod_1.z.object({
 exports.createBlogInput = zod_1.z.object({
     title: zod_1.z.string(),
     content: zod_1.z.string(),
-    authorId: zod_1.z.string(),
 });
 exports.updateBlogInput = zod_1.z.object({
     title: zod_1.z.string(),
