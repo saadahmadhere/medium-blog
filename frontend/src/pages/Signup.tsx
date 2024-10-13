@@ -1,6 +1,19 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SignupInterface } from '../types/SignupInterface';
 
 const Signup = () => {
+	const [userDeatils, setUserDetails] = useState<SignupInterface>({
+		name: '',
+		email: '',
+		password: '',
+	});
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		console.log({ userDeatils });
+	};
+
 	return (
 		<div className='flex h-screen'>
 			<section className='w-1/2 flex flex-col justify-center items-center'>
@@ -16,7 +29,10 @@ const Signup = () => {
 							</Link>
 						</div>
 					</div>
-					<form className='flex flex-col gap-2'>
+					<form
+						className='flex flex-col gap-2'
+						onSubmit={(e) => handleSubmit(e)}
+					>
 						<label htmlFor='name' className='text-slate-700 font-semibold'>
 							Username
 						</label>
@@ -24,6 +40,10 @@ const Signup = () => {
 							type='text'
 							placeholder='Name'
 							className='border-2 border-slate-200 p-2 rounded-md'
+							value={userDeatils.name}
+							onChange={(e) =>
+								setUserDetails({ ...userDeatils, name: e.target.value })
+							}
 						/>
 						<label htmlFor='email' className='text-slate-700 font-semibold'>
 							Email
@@ -32,6 +52,10 @@ const Signup = () => {
 							type='email'
 							placeholder='Email'
 							className='border-2 border-slate-200 p-2 rounded-md'
+							value={userDeatils.email}
+							onChange={(e) =>
+								setUserDetails({ ...userDeatils, email: e.target.value })
+							}
 						/>
 						<label htmlFor='password' className='text-slate-700 font-semibold'>
 							Password
@@ -40,8 +64,15 @@ const Signup = () => {
 							type='password'
 							placeholder='Password'
 							className='border-2 border-slate-200 p-2 rounded-md'
+							value={userDeatils.password}
+							onChange={(e) =>
+								setUserDetails({ ...userDeatils, password: e.target.value })
+							}
 						/>
-						<button className='bg-slate-900 text-white p-2 rounded-md mt-5'>
+						<button
+							className='bg-slate-900 text-white p-2 rounded-md mt-5'
+							type='submit'
+						>
 							Sign up
 						</button>
 					</form>
