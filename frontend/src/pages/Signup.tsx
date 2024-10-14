@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { SignupInterface } from '../types/SignupInterface';
+import { SignupInput } from '@saadahmadhere/medium-common';
 
 const Signup = () => {
-	const [userDeatils, setUserDetails] = useState<SignupInterface>({
-		name: '',
+	const [userDeatils, setUserDetails] = useState<SignupInput>({
+		firstName: '',
 		email: '',
 		password: '',
 	});
@@ -40,9 +40,9 @@ const Signup = () => {
 							type='text'
 							placeholder='Name'
 							className='border-2 border-slate-200 p-2 rounded-md'
-							value={userDeatils.name}
+							value={userDeatils.firstName}
 							onChange={(e) =>
-								setUserDetails({ ...userDeatils, name: e.target.value })
+								setUserDetails({ ...userDeatils, firstName: e.target.value })
 							}
 						/>
 						<label htmlFor='email' className='text-slate-700 font-semibold'>
