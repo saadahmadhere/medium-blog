@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SignupInput } from '@saadahmadhere/medium-common';
+import { BACKEND_URL } from '../config';
+import axios from 'axios';
 
 const Signup = () => {
 	const [userDeatils, setUserDetails] = useState<SignupInput>({
@@ -8,10 +10,24 @@ const Signup = () => {
 		email: '',
 		password: '',
 	});
+	const navigate = useNavigate();
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log({ userDeatils });
+
+		try {
+			const res = await axios.post(`${BACKEND_URL}/user/signup`, userDeatils);
+			if (res.status === 200) {
+				// redirect to the blog page
+				localStorage.setItem('token', res.data.token);
+				navigate('/blogs');
+			}
+		} catch (error) {
+			alert('something went wrong, ');
+			console.log('something went wrong, ', (error as Error).message);
+		} finally {
+			setUserDetails({ firstName: '', email: '', password: '' });
+		}
 	};
 
 	return (
