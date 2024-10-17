@@ -31,7 +31,7 @@ const Signup = () => {
 	};
 
 	return (
-		<div className='flex h-screen'>
+		<div className='flex h-[calc(100vh-4rem)]'>
 			<section className='w-1/2 flex flex-col justify-center items-center'>
 				<div className='w-1/2'>
 					<div className='flex flex-col items-center justify-center mb-10'>
