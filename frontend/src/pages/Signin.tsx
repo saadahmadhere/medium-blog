@@ -1,5 +1,8 @@
-import { SigninInput } from '@saadahmadhere/medium-common';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { SigninInput } from '@saadahmadhere/medium-common';
+import { BACKEND_URL } from '../config';
+import axios from 'axios';
 
 const Signin = () => {
 	const [userDeatils, setUserDetails] = useState<SigninInput>({
@@ -7,9 +10,23 @@ const Signin = () => {
 		password: '',
 	});
 
+	const navigate = useNavigate();
+
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		// Add your form submission logic here
+		try {
+			const res = await axios.post(`${BACKEND_URL}/user/signin`, userDeatils);
+			if (res.status === 200) {
+				localStorage.setItem('token', res.data.token);
+				// redirect to the blog page
+				navigate('/blogs');
+			}
+		} catch (error) {
+			alert('something went wrong, ');
+			console.log('something went wrong, ', (error as Error).message);
+		} finally {
+			setUserDetails({ email: '', password: '' });
+		}
 	};
 	return (
 		<div className='flex h-[calc(100vh-4rem)]'>
@@ -35,6 +52,7 @@ const Signin = () => {
 							onChange={(e) =>
 								setUserDetails({ ...userDeatils, email: e.target.value })
 							}
+							autoFocus
 						/>
 						<label htmlFor='password' className='text-slate-700 font-semibold'>
 							Password
