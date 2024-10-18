@@ -60,6 +60,7 @@ const Signup = () => {
 							onChange={(e) =>
 								setUserDetails({ ...userDeatils, firstName: e.target.value })
 							}
+							autoFocus
 						/>
 						<label htmlFor='email' className='text-slate-700 font-semibold'>
 							Email
