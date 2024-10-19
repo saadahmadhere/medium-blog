@@ -102,10 +102,24 @@ blogRouter.get('/bulk', async (c) => {
 	}).$extends(withAccelerate());
 
 	try {
-		const allBlogs = await prisma.blog.findMany();
-		const blogTitles =
-			allBlogs.length > 0 ? allBlogs.map((blog) => blog.title) : [];
-		return c.json({ blogs: blogTitles });
+		const allBlogs = await prisma.blog.findMany({
+			select: {
+				id: true,
+				title: true,
+				content: true,
+				isPublished: true,
+				author: {
+					select: {
+						firstName: true,
+						id: true,
+					},
+				},
+				createdAt: true,
+				updatedAt: true,
+			},
+		});
+		console.log({ allBlogs });
+		return c.json({ blogs: allBlogs });
 	} catch (error) {
 		return c.json({ message: (error as Error).message });
 	}
