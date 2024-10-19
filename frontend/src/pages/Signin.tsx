@@ -9,12 +9,14 @@ const Signin = () => {
 		email: '',
 		password: '',
 	});
+	const [loading, setLoading] = useState(false);
 
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
+			setLoading(true);
 			const res = await axios.post(`${BACKEND_URL}/user/signin`, userDeatils);
 			if (res.status === 200) {
 				localStorage.setItem('token', res.data.token);
@@ -26,8 +28,13 @@ const Signin = () => {
 			console.log('something went wrong, ', (error as Error).message);
 		} finally {
 			setUserDetails({ email: '', password: '' });
+			setLoading(false);
 		}
 	};
+
+	if (loading) {
+		return <div>Loading...</div>;
+	}
 	return (
 		<div className='flex h-[calc(100vh-4rem)]'>
 			<section className='w-1/2 flex flex-col justify-center items-center'>
