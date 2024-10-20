@@ -118,7 +118,7 @@ blogRouter.get('/bulk', async (c) => {
 				updatedAt: true,
 			},
 		});
-		console.log({ allBlogs });
+
 		return c.json({ blogs: allBlogs });
 	} catch (error) {
 		return c.json({ message: (error as Error).message });
