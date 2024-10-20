@@ -1,45 +1,9 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { BACKEND_URL } from '../config';
 import BlogCard from '../components/BlogCard';
+import { useBlogs } from '../hooks/useBlogs';
 
 const BlogList = () => {
-	interface AuthorType {
-		firstName: string;
-		id: string;
-	}
-	interface BlogType {
-		title: string;
-		content: string;
-		isPublished: boolean;
-		id: string;
-		author: AuthorType;
-		createdAt: string;
-		updatedAt: string;
-	}
-	type blogListType = BlogType[];
+	const { blogs, loading } = useBlogs();
 
-	const [blogs, setBlogs] = useState<blogListType>([]);
-	const [loading, setLoading] = useState<boolean>(false);
-	useEffect(() => {
-		(async () => {
-			try {
-				const tokenStr = localStorage.getItem('token');
-				setLoading(true);
-				const res = await axios.get(`${BACKEND_URL}/blog/bulk`, {
-					headers: { Authorization: `${tokenStr}` },
-				});
-
-				if (res.status === 200) {
-					setBlogs(res.data.blogs);
-				}
-			} catch (error) {
-				console.log('some error occuered: ', { error });
-			} finally {
-				setLoading(false);
-			}
-		})();
-	}, []);
 	if (loading) {
 		return <div>Loading...</div>;
 	}
