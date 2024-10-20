@@ -18,7 +18,7 @@ const BlogCard = ({
 	const navigate = useNavigate();
 
 	const handleBlogCardClick = (): void => {
-		navigate(`${blogId}`);
+		navigate(`/blog/${blogId}`);
 	};
 	const getTruncatedContent = (content: string): string => {
 		if (content.length > 100) {
