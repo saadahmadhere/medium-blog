@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { BACKEND_URL } from '../config';
+import useIsLoggedIn from './useIsLoggedIn';
 
 interface AuthorType {
 	firstName: string;
@@ -19,14 +20,14 @@ interface BlogType {
 export const useBlogs = () => {
 	const [blogs, setBlogs] = useState<BlogType[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
+	const { token } = useIsLoggedIn();
 
 	useEffect(() => {
 		(async () => {
 			try {
-				const tokenStr = localStorage.getItem('token');
 				setLoading(true);
 				const res = await axios.get(`${BACKEND_URL}/blog/bulk`, {
-					headers: { Authorization: `${tokenStr}` },
+					headers: { Authorization: `${token}` },
 				});
 
 				if (res.status === 200) {
