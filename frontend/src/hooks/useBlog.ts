@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import { BACKEND_URL } from '../config';
+import useIsLoggedIn from './useIsLoggedIn';
 
 interface Blog {
 	title: string;
@@ -10,14 +11,14 @@ interface Blog {
 export const useBlog = (id: string | undefined) => {
 	const [blog, setBlog] = useState<Blog>({ title: '', content: '' });
 	const [loading, setLoading] = useState<boolean>(false);
+	const { token } = useIsLoggedIn();
 
 	useEffect(() => {
 		(async () => {
 			try {
 				setLoading(true);
-				const tokenStr = localStorage.getItem('token');
 				const res = await axios.get(`${BACKEND_URL}/blog/${id}`, {
-					headers: { Authorization: `${tokenStr}` },
+					headers: { Authorization: `${token}` },
 				});
 				const data = res.data.blog;
 				setBlog(data);
@@ -27,7 +28,7 @@ export const useBlog = (id: string | undefined) => {
 				setLoading(false);
 			}
 		})();
-	}, [id]);
+	}, [id, token]);
 
 	return { blog, loading };
 };
